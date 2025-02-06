@@ -14,14 +14,14 @@ type CustomerController struct {
 	Validate    *validator.Validate
 }
 
-func NewCustomerController(UserService *service.UserServiceImpl, validate *validator.Validate) *CustomerController {
+func NewUserController(UserService *service.UserServiceImpl, validate *validator.Validate) *CustomerController {
 	return &CustomerController{
 		UserService: UserService,
 		Validate:    validate,
 	}
 }
 
-func (controller *CustomerController) CreateCustomersUser(c *gin.Context) {
+func (controller *CustomerController) CreateUser(c *gin.Context) {
 	var req web.CreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		exception.ErrorHandler(c, err)
@@ -36,6 +36,36 @@ func (controller *CustomerController) CreateCustomersUser(c *gin.Context) {
 	arg := web.CreateUserPayload(req)
 
 	payload, err := controller.UserService.CreateUser(c.Request.Context(), arg)
+	if err != nil {
+		exception.ErrorHandler(c, err)
+		return
+	}
+
+	WebResponse := web.WebResponse{
+		Code:   200,
+		Data:   payload,
+		Status: "OK",
+	}
+
+	helper.HandleEncodeWriteJson(c, WebResponse)
+}
+
+func (controller *CustomerController) GetUser(c *gin.Context) {
+	type GetUserReq struct {
+		Email string `json:"email" binding:"required,email"`
+	}
+	var req GetUserReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		exception.ErrorHandler(c, err)
+		return
+	}
+
+	if err := controller.Validate.Struct(req); err != nil {
+		exception.ErrorHandler(c, err)
+		return
+	}
+
+	payload, err := controller.UserService.GetUser(c.Request.Context(), req.Email)
 	if err != nil {
 		exception.ErrorHandler(c, err)
 		return
