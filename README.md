@@ -13,7 +13,7 @@ This repository contains the Saving Plan API, a GoLang-based application designe
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/saving-plan-api.git
+   git clone https://github.com/fajarherd22/saving-plan-api.git
    ```
 2. Navigate to the project directory:
    ```sh
@@ -35,7 +35,3 @@ This repository contains the Saving Plan API, a GoLang-based application designe
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
